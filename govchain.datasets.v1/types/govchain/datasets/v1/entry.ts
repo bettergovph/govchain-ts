@@ -28,6 +28,7 @@ export interface Entry {
   timestamp: string;
   pinCount: string;
   creator: string;
+  txHash: string;
 }
 
 function createBaseEntry(): Entry {
@@ -48,6 +49,7 @@ function createBaseEntry(): Entry {
     timestamp: "",
     pinCount: "",
     creator: "",
+    txHash: "",
   };
 }
 
@@ -100,6 +102,9 @@ export const Entry: MessageFns<Entry> = {
     }
     if (message.creator !== "") {
       writer.uint32(130).string(message.creator);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(138).string(message.txHash);
     }
     return writer;
   },
@@ -239,6 +244,14 @@ export const Entry: MessageFns<Entry> = {
           message.creator = reader.string();
           continue;
         }
+        case 17: {
+          if (tag !== 138) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -266,6 +279,7 @@ export const Entry: MessageFns<Entry> = {
       timestamp: isSet(object.timestamp) ? globalThis.String(object.timestamp) : "",
       pinCount: isSet(object.pinCount) ? globalThis.String(object.pinCount) : "",
       creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
     };
   },
 
@@ -319,6 +333,9 @@ export const Entry: MessageFns<Entry> = {
     if (message.creator !== "") {
       obj.creator = message.creator;
     }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
+    }
     return obj;
   },
 
@@ -343,6 +360,7 @@ export const Entry: MessageFns<Entry> = {
     message.timestamp = object.timestamp ?? "";
     message.pinCount = object.pinCount ?? "";
     message.creator = object.creator ?? "";
+    message.txHash = object.txHash ?? "";
     return message;
   },
 };
